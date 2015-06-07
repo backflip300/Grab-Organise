@@ -1,0 +1,167 @@
+package grabber;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
+public class UrlFinder {
+	private static ArrayList<String> wanted;
+	private ArrayList<String> identifiersStart;
+	private ArrayList<String> identifiersEnd;
+	private static Path pLocation;
+	private static Charset charset;
+	private static String sLocation;
+	private static URL oracle;
+
+	public UrlFinder(String topUrlInput, String checkingUrl,
+			ArrayList<String> identifiersTemp) {
+
+		identifiersStart = new ArrayList<String>();
+		identifiersEnd = new ArrayList<String>();
+		for (int i = 0; i < identifiersTemp.size() / 2; i++) {
+			identifiersStart.add(identifiersTemp.get(2 * i));
+			identifiersEnd.add(identifiersTemp.get((2 * i) + 1));
+		}
+		String topUrl = topUrlInput;
+		try {
+			findUrls(topUrl, checkingUrl, identifiersStart, identifiersEnd);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// storeUrls();
+
+	}
+
+	public static void findUrls(String topUrl, String checkingUrl,
+			ArrayList<String> identifiersStart, ArrayList<String> identifiersEnd)
+			throws IOException {
+		// System.out.println("got here.jpeg");
+		wanted = new ArrayList<String>();
+		int cutPointStart = 0, cutPointEnd = 0;
+		String inputLine;
+		String cut = null;
+		pLocation = Paths.get("C:/Users/Edward/Documents/Urls/test.txt");
+		charset = Charset.defaultCharset();
+		sLocation = "C:/Users/Edward/Documents/Urls/test.txt";
+		oracle = new URL(checkingUrl);
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				oracle.openStream()));
+
+		while ((inputLine = in.readLine()) != null) {
+
+			for (int d = 0; d < identifiersStart.size(); d++) {
+				if (inputLine.contains(identifiersStart.get(d))) {
+					// System.out.println(inputLine);
+					// where identifier located
+
+					cutPointStart = inputLine.indexOf(identifiersStart.get(d),
+							-1);
+					// find the end point of url
+					try {
+						cutPointEnd = inputLine.indexOf(identifiersEnd.get(d),
+								cutPointStart
+										+ identifiersStart.get(d).length());
+						cut = inputLine
+								.substring(cutPointStart
+										+ identifiersStart.get(d).length(),
+										cutPointEnd);
+					} catch (IndexOutOfBoundsException e) {
+						System.out.println("welp we skip this line");
+					}
+					if (cut.contains("#") == false
+							&& cut.contains("{{") == false) {
+						if (cut.startsWith("/")) {
+							cut = topUrl + cut;
+						}
+
+						if (cut.contains("/Login?") == false
+								&& cut.contains("/Registration?") == false
+								&& cut.startsWith(topUrl)
+								&& wantedIncludes(cut, wanted) == false
+								&& TextFileContains(cut, pLocation, charset) == false) {
+							wanted.add(cut);
+							// System.out.println("cut");
+							System.out.println(cut);
+
+						}
+					}
+				}
+			}
+		}
+		writetofile(wanted, sLocation);
+		in.close();
+	}
+
+	private static boolean wantedIncludes(String cut, ArrayList<String> wanted) {
+		Boolean found = false;
+		for (int i = 0; i < wanted.size(); i++) {
+			if (cut.equalsIgnoreCase(wanted.get(i))) {
+				found = true;
+			}
+		}
+		return found;
+	}
+
+	private void printUrls(ArrayList<String> wanted) {
+		for (int i = 0; i < wanted.size(); i++) {
+			// System.out.println(wanted.get(i));
+			// System.out.println(x);
+		}
+	}
+
+	public static void writetofile(ArrayList<String> toWrite, String location) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(
+				location, true))) {
+			for (int i = 0; i < toWrite.size(); i++) {
+				// System.out.println(toWrite.get(i));
+				writer.write(toWrite.get(i));
+				writer.newLine();
+
+			}
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static boolean TextFileContains(String toCheck, Path location,
+			Charset charset) {
+		boolean found = false;
+		try (BufferedReader reader = Files.newBufferedReader(location, charset)) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				// System.out.println("got here");
+				if (toCheck.equalsIgnoreCase(line)) {
+					found = true;
+					// System.out.println("found it");
+
+				}
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			// found = false;
+
+		}
+
+		return found;
+	}
+
+	public static void clear() {
+		wanted.clear();
+	}
+
+	public ArrayList<String> getwanted() {
+		return wanted;
+	}
+}
