@@ -1,0 +1,184 @@
+package gui;
+
+import grabber.Main;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import net.miginfocom.swing.MigLayout;
+
+public class FirstWindow extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+
+	String topUrl;
+	JFrame mFrame;
+	ScrollTextArea console;
+	ScrollTextArea identifiers;
+
+	JTextField textField;
+	JLabel Label;
+	ArrayList<String> identifiersTemp = new ArrayList<String>();
+	
+	JTextField inputAreaURL;
+	JTextField inputAreaLimit;
+	JTextField inputAreaStart;
+	JTextField inputAreaEnd;
+
+	public FirstWindow() {
+
+		mFrame = new JFrame("Socket Chat - Server");
+		mFrame.getContentPane().setLayout(new MigLayout());
+		mFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		final JTextField inputAreaURL = new JTextField();
+		final JTextField inputAreaLimit = new JTextField();
+		final JTextField inputAreaStart = new JTextField();
+		final JTextField inputAreaEnd = new JTextField();
+
+		// /////////////////////////////////////////////////
+		// setup gui
+		
+		//BUTTTONS! :)
+		JButton Start = new JButton("Start");
+		JButton add = new JButton("add identifiers");
+		JButton clear = new JButton("clear identifiers");
+
+		mFrame.add(new JLabel("Input"), "north");
+		mFrame.add(new JLabel("Output"), "north, gapleft 340");
+		
+		// top Url
+		
+		inputAreaURL.setText("http://www.sportsdirect.com");
+		mFrame.add(new JLabel("top Url"), "gaptop 11");
+		inputAreaURL.setPreferredSize(new Dimension(200, 24));
+		mFrame.add(inputAreaURL, "wrap");
+
+		// url limit
+		
+		inputAreaLimit.setText("500");
+		mFrame.add(new JLabel("limit"));
+		inputAreaLimit.setPreferredSize(new Dimension(200, 24));
+		mFrame.add(inputAreaLimit, "wrap");
+
+		// start identifier
+		
+		inputAreaStart.setText("href=\"");
+		mFrame.add(new JLabel("Start"));
+		inputAreaStart.setPreferredSize(new Dimension(200, 24));
+		mFrame.add(inputAreaStart, "wrap");
+
+		// end identifier
+
+		inputAreaEnd.setText("\"");
+		mFrame.add(new JLabel("End"));
+		inputAreaEnd.setPreferredSize(new Dimension(200, 24));
+		mFrame.add(inputAreaEnd, "wrap");
+
+		// buttons again
+
+		mFrame.add(add);
+		mFrame.add(clear, "wrap");
+		mFrame.add(Start, "South,");
+		
+		//button actions
+		
+		//add
+		
+		add.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (Checkifadded() == false) {
+					identifiers.appendToOutput(
+							"start : " + inputAreaStart.getText() + "\n",
+							Color.blue, true);
+					identifiers.appendToOutput(
+							"end : " + inputAreaEnd.getText() + "\n",
+							Color.RED, false);
+					identifiersTemp.add(inputAreaStart.getText());
+					identifiersTemp.add(inputAreaEnd.getText());
+					for (int i = 0; i < identifiersTemp.size(); i++) {
+						System.out.println(identifiersTemp.get(i));
+					}
+				}
+			}
+
+			private boolean Checkifadded() {
+				boolean added = false;
+				for (int i = 0; i < identifiersTemp.size() / 2; i++) {
+					System.out.println("checking");
+					System.out.println(i);
+					System.out.println(inputAreaStart.getText() + " \t" + identifiersTemp.get(2*i));
+					System.out.println(inputAreaEnd.getText() + " \t" + identifiersTemp.get((2*i) + 1) );
+					if (inputAreaStart.getText().equals(identifiersTemp.get(2 * i))
+							&& inputAreaEnd.getText().equals(identifiersTemp
+									.get((2*i) + 1))) {
+						added = true;
+					}
+				}
+				return added;
+
+			}
+		});
+		
+		//clear
+		
+		clear.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				identifiers.clear();
+				identifiersTemp.clear();
+			}
+		});
+		
+		//Start
+		
+		Start.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				topUrl = inputAreaURL.getText();
+				Main.start();
+			}
+		});
+		
+
+		console = new ScrollTextArea(500, 800);
+		mFrame.add(console, "east");
+		identifiers = new ScrollTextArea(315, 650);
+		mFrame.add(identifiers, "wrap, span 2");
+		
+		
+		
+		mFrame.pack();
+		mFrame.setVisible(true);
+		mFrame.setResizable(false);
+	}
+	
+	// getters and setters
+	
+	
+	public ArrayList<String> Identifiers() {
+		return identifiersTemp;
+	}
+	public String getTopUrl(){
+		return topUrl;
+	}
+	public void appendString(String toAppend){
+		console.appendToOutput(toAppend, Color.BLACK, false);
+	}
+	public void appendArray(ArrayList<String> toAppend){
+		for (int i = 0 ; i < toAppend.size(); i++){
+			System.out.println(toAppend.get(i));
+			console.appendToOutput(toAppend.get(i) + "\n", Color.BLACK, true);
+		}
+	}
+}
