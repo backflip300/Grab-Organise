@@ -1,0 +1,89 @@
+package grabber;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.ObjectInputStream.GetField;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import gui.*;
+
+public class Main {
+	static gui.FirstWindow fw;
+	static UrlFinder finder;
+	private static Path pLocation;
+	private static Charset charset;
+	//private static String sLocation;
+	//private URL oracle;
+	static String topUrl;
+
+
+	public static void main(String args[]) {
+		ArrayList<String> startAndEnd = new ArrayList<String>();
+		String topUrlInput = "http://www.sportsdirect.com";
+		takeinput(topUrlInput, startAndEnd);
+
+	}
+
+	private static void takeinput(String topUrlInput,
+			ArrayList<String> startAndEnd) {
+		fw = new FirstWindow();
+
+	}
+
+	public static void start() {
+		int x = 0;
+		
+		//fw.appendString("ayy lmao");
+		topUrl = fw.getTopUrl();
+		ArrayList<String> identifiersStart;
+		ArrayList<String> identifiersEnd;
+		identifiersStart = new ArrayList<String>();
+		identifiersEnd = new ArrayList<String>();
+		for (int i = 0; i < fw.Identifiers().size() / 2; i++) {
+			identifiersStart.add(fw.Identifiers().get(2 * i));
+			identifiersEnd.add(fw.Identifiers().get((2 * i) + 1));
+		}
+
+		
+		finder = new UrlFinder(topUrl, topUrl,
+		fw.Identifiers());
+		
+		pLocation = Paths.get("C:/Users/Edward/Documents/Urls/test.txt");
+		charset = Charset.defaultCharset();
+		//sLocation = "C:/Users/Edward/Documents/Urls/test.txt";
+		pLocation = Paths.get("C:/Users/Edward/Documents/Urls/test.txt");
+		//fw.appendArray(finder.getwanted());
+		
+		
+		try (BufferedReader reader = Files
+				.newBufferedReader(pLocation, charset)) {
+			String line;
+			while ((line = reader.readLine()) != null ) {
+				//UrlFinder.clear();
+				
+				x++;
+				System.out.println(x);
+				//System.out.println(line);
+				try{
+				UrlFinder.findUrls(topUrl, line.substring(line.indexOf("h")), identifiersStart,
+						identifiersEnd);
+				}catch (IOException e){
+					System.out.println("think i'll skip this one");
+				}
+				System.out.println(finder.getwanted().size());
+				fw.appendArray(finder.getwanted());
+			}
+			System.out.println("my god it's finished!!!");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("had an ouchie");
+		}
+	}
+}
