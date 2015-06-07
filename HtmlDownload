@@ -1,0 +1,48 @@
+
+package grabber;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
+
+public class HtmlDownload {
+
+	public static void main(String args[]) throws IOException {
+		URL oracle = new URL(
+				"http://www.argos.co.uk/static/Product/partNumber/9108446.htm");
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				oracle.openStream()));
+		ArrayList<String> wanted = new ArrayList<String>();
+		String inputLine;
+		//String identifier = "<br>&gt;";
+		String identifier = "<li>";
+		String cut;
+		int x = 0, StartPoint = 0, endpoint = 0;
+		while ((inputLine = in.readLine()) != null) {
+					
+			x++;
+			if (inputLine.contains(identifier)) {
+				System.out.println(inputLine);
+				StartPoint = inputLine.indexOf(identifier, -1);
+				System.out.println(StartPoint);
+				if ( inputLine.substring(StartPoint + identifier.length()).contains("<")){
+					endpoint = inputLine.indexOf("<", StartPoint + identifier.length());
+				}else{
+					endpoint = inputLine.length();
+				}
+				System.out.println(endpoint);
+				cut = inputLine.substring( StartPoint + identifier.length(),endpoint );
+				wanted.add(Integer.toString(x)  + "  " + cut);
+			}
+		}
+	
+		in.close();
+		for (int i = 0; i < wanted.size(); i++) {
+			System.out.println(wanted.get(i));
+		}
+
+}
+}
+
