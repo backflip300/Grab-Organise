@@ -1,0 +1,40 @@
+package grabber;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+
+public class HtmlToArrayList {
+
+	public HtmlToArrayList() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public ArrayList<String> getHtml(String Url) throws IOException {
+		ArrayList<String> Html = new ArrayList<String>();
+		URL oracle;
+		try {
+			oracle = new URL(Url);
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				oracle.openStream()));
+		String inputLine;
+		while((inputLine = in.readLine()) != null){
+			Html.add(inputLine);
+		}
+		for(int i = 0; i < Html.size(); i++){
+			//System.out.println(Html.get(i));
+		}
+		} catch (MalformedURLException e) {
+			//System.out.println("inputted Url did not work");
+			e.printStackTrace();		
+		}
+		
+		return Html;
+		
+	}
+	
+	
+}
