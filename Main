@@ -24,19 +24,16 @@ public class Main {
 
 
 	public static void main(String args[]) {
-		ArrayList<String> startAndEnd = new ArrayList<String>();
-		String topUrlInput = "http://www.sportsdirect.com";
-		takeinput(topUrlInput, startAndEnd);
-
+		
+		takeinput();
 	}
 
-	private static void takeinput(String topUrlInput,
-			ArrayList<String> startAndEnd) {
+	private static void takeinput() {
 		fw = new FirstWindow();
 
 	}
 
-	public static void start() {
+	public static void run() {
 		int x = 0;
 		
 		//fw.appendString("ayy lmao");
@@ -60,11 +57,11 @@ public class Main {
 		pLocation = Paths.get("C:/Users/Edward/Documents/Urls/" + topUrltrim + ".txt");
 		//fw.appendArray(finder.getwanted());
 		
-		
-		try (BufferedReader reader = Files
+		 	try (BufferedReader reader = Files
 				.newBufferedReader(pLocation, charset)) {
 			String line;
 			while ((line = reader.readLine()) != null ) {
+		
 				//UrlFinder.clear();
 				
 				x++;
@@ -80,7 +77,9 @@ public class Main {
 				fw.appendArray(finder.getwanted());
 			}
 			System.out.println("my god it's finished!!!");
-		} catch (IOException e) {
+	
+		 } catch (IOException e) {
+		
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("had an ouchie");
