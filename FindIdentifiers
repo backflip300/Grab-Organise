@@ -1,0 +1,41 @@
+package grabber;
+
+import java.io.IOException;
+
+import java.util.ArrayList;
+
+public class FindIdentifiers {
+	public FindIdentifiers() { 
+		// TODO Auto-generated constructor stub
+	}
+
+	public ArrayList<String> FindIds(String topUrl) throws IOException {
+		
+		ArrayList<String> Html = new ArrayList<String>();
+		HtmlToArrayList gethtml = new HtmlToArrayList();
+		Html = gethtml.getHtml(topUrl);
+		for (int i = Html.size(); i > 0; i-- ){
+			if ( Html.get(i-1).contains(topUrl) == true ){
+				System.out.println(Html.get(i-1));
+			}else{
+				Html.remove(i-1);
+			}
+		}
+		int endpoint,startpoint;
+		
+		
+		for (int i = 0;i < Html.size(); i++){
+			//get startpoint
+			startpoint = Html.get(i).indexOf(topUrl) - 10;
+			if (startpoint  < 0 ){
+				startpoint = 0;
+			}
+			endpoint = Html.get(i).indexOf(topUrl) + topUrl.length() + 10;
+			if ( endpoint > Html.get(i).length());
+			endpoint = Html.get(i).length();
+			Html.set(i, Html.get(i).substring(startpoint, endpoint));
+		}
+		
+		return Html;
+	}
+}
