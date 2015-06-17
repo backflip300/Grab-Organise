@@ -53,11 +53,11 @@ public class Main {
 		
 		finder = new UrlFinder(topUrl, topUrl,
 		fw.Identifiers());
-		
-		pLocation = Paths.get("C:/Users/Edward/Documents/Urls/test.txt");
+		String topUrltrim = topUrl.substring(topUrl.indexOf("//"));
+		pLocation = Paths.get("C:/Users/Edward/Documents/Urls/" + topUrltrim + ".txt");
 		charset = Charset.defaultCharset();
 		//sLocation = "C:/Users/Edward/Documents/Urls/test.txt";
-		pLocation = Paths.get("C:/Users/Edward/Documents/Urls/test.txt");
+		pLocation = Paths.get("C:/Users/Edward/Documents/Urls/" + topUrltrim + ".txt");
 		//fw.appendArray(finder.getwanted());
 		
 		
