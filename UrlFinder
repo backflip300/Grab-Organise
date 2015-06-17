@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,7 +17,7 @@ public class UrlFinder {
 	private static Path pLocation;
 	private static Charset charset;
 	private static String sLocation;
-	private static URL oracle;
+	private static String topUrltrim;
 
 	public UrlFinder(String topUrlInput, String checkingUrl,
 			ArrayList<String> identifiersTemp) {
@@ -44,20 +42,26 @@ public class UrlFinder {
 	public static void findUrls(String topUrl, String checkingUrl,
 			ArrayList<String> identifiersStart, ArrayList<String> identifiersEnd)
 			throws IOException {
+		topUrltrim = topUrl.substring(topUrl.indexOf("//"));
 		// System.out.println("got here.jpeg");
 		wanted = new ArrayList<String>();
 		int cutPointStart = 0, cutPointEnd = 0;
 		String inputLine;
+
 		String cut = null;
-		pLocation = Paths.get("C:/Users/Edward/Documents/Urls/test.txt");
+		pLocation = Paths.get("C:/Users/Edward/Documents/Urls/" + topUrltrim + ".txt");
 		charset = Charset.defaultCharset();
-		sLocation = "C:/Users/Edward/Documents/Urls/test.txt";
-		oracle = new URL(checkingUrl);
+		sLocation = "C:/Users/Edward/Documents/Urls/" + topUrltrim + ".txt";
+	/*	oracle = new URL(checkingUrl);
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				oracle.openStream()));
-
-		while ((inputLine = in.readLine()) != null) {
-
+	*/
+		//while ((inputLine = in.readLine()) != null) {
+		ArrayList<String> Html = new ArrayList<String>();
+		HtmlToArrayList gethtml = new HtmlToArrayList();
+		Html = gethtml.getHtml(topUrl);
+		for (int i = 0;i < Html.size(); i++ ){
+			inputLine = Html.get(i);
 			for (int d = 0; d < identifiersStart.size(); d++) {
 				if (inputLine.contains(identifiersStart.get(d))) {
 					// System.out.println(inputLine);
@@ -95,10 +99,10 @@ public class UrlFinder {
 						}
 					}
 				}
-			}
+		}
 		}
 		writetofile(wanted, sLocation);
-		in.close();
+	//in.close();
 	}
 
 	private static boolean wantedIncludes(String cut, ArrayList<String> wanted) {
