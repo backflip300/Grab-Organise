@@ -1,11 +1,13 @@
 package gui;
 
 import grabber.Main;
+import grabber.FindIdentifiers;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -50,6 +52,7 @@ public class FirstWindow extends JFrame {
 		JButton Start = new JButton("Start");
 		JButton add = new JButton("add identifiers");
 		JButton clear = new JButton("clear identifiers");
+		JButton findids = new JButton("find identifiers");
 
 		mFrame.add(new JLabel("Input"), "north");
 		mFrame.add(new JLabel("Output"), "north, gapleft 340");
@@ -86,9 +89,35 @@ public class FirstWindow extends JFrame {
 
 		mFrame.add(add);
 		mFrame.add(clear, "wrap");
+		mFrame.add(findids, "wrap");
 		mFrame.add(Start, "South,");
 		
 		//button actions
+		
+		//find identifiers
+		
+		findids.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+				ArrayList<String> HtmlIds = new ArrayList<String>();
+				FindIdentifiers ids = new FindIdentifiers();
+				topUrl = inputAreaURL.getText();
+				System.out.println(topUrl);
+				HtmlIds = ids.FindIds(topUrl);
+				System.out.println(HtmlIds.size());
+				for ( int i = 0; i < HtmlIds.size(); i++){
+					console.appendToOutput(HtmlIds.get(i) + "\n", Color.RED, false);
+				}
+				
+				} catch (IOException e) {
+					e.printStackTrace();
+					System.out.println("we had a mare");
+				}
+				
+			}
+		});
 		
 		//add
 		
@@ -146,13 +175,14 @@ public class FirstWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				topUrl = inputAreaURL.getText();
-				Main.start();
+				Main.run();
 			}
 		});
 		
 
-		console = new ScrollTextArea(500, 800);
+		console = new ScrollTextArea(1000, 800);
 		mFrame.add(console, "east");
+		//console.appendToOutput("hello", Color.BLACK, true);
 		identifiers = new ScrollTextArea(315, 650);
 		mFrame.add(identifiers, "wrap, span 2");
 		
