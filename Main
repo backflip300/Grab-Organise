@@ -2,18 +2,16 @@ package grabber;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.ObjectInputStream.GetField;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Scanner;
-
 import gui.*;
 
-public class Main {
+public class Main implements Runnable {
+	
+
 	static gui.FirstWindow fw;
 	static UrlFinder finder;
 	private static Path pLocation;
@@ -33,7 +31,7 @@ public class Main {
 
 	}
 
-	public static void run() {
+	public void run() {
 		int x = 0;
 		
 		//fw.appendString("ayy lmao");
@@ -51,10 +49,11 @@ public class Main {
 		finder = new UrlFinder(topUrl, topUrl,
 		fw.Identifiers());
 		String topUrltrim = topUrl.substring(topUrl.indexOf("//"));
-		pLocation = Paths.get("C:/Users/Edward/Documents/Urls/" + topUrltrim + ".txt");
+		pLocation = Paths.get("U/Urls" + topUrltrim + ".txt");
 		charset = Charset.defaultCharset();
+		System.out.println();
 		//sLocation = "C:/Users/Edward/Documents/Urls/test.txt";
-		pLocation = Paths.get("C:/Users/Edward/Documents/Urls/" + topUrltrim + ".txt");
+		pLocation = Paths.get("U:/Urls" + topUrltrim + ".txt");
 		//fw.appendArray(finder.getwanted());
 		
 		 	try (BufferedReader reader = Files
