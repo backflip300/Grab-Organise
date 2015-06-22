@@ -49,9 +49,9 @@ public class UrlFinder {
 		String inputLine;
 
 		String cut = null;
-		pLocation = Paths.get("C:/Users/Edward/Documents/Urls/" + topUrltrim + ".txt");
+		pLocation = Paths.get("U:/Urls" + topUrltrim + ".txt");
 		charset = Charset.defaultCharset();
-		sLocation = "C:/Users/Edward/Documents/Urls/" + topUrltrim + ".txt";
+		sLocation = "U:/Urls" + topUrltrim + ".txt";
 	/*	oracle = new URL(checkingUrl);
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				oracle.openStream()));
@@ -59,7 +59,7 @@ public class UrlFinder {
 		//while ((inputLine = in.readLine()) != null) {
 		ArrayList<String> Html = new ArrayList<String>();
 		HtmlToArrayList gethtml = new HtmlToArrayList();
-		Html = gethtml.getHtml(topUrl);
+		Html = gethtml.getHtml(checkingUrl);
 		for (int i = 0;i < Html.size(); i++ ){
 			inputLine = Html.get(i);
 			for (int d = 0; d < identifiersStart.size(); d++) {
